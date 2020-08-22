@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hong.eduservice.mapper.EduCourseMapper">
+    <select id="selectCoursePublishVoById" resultType="com.hong.eduservice.entity.vo.CoursePublishVo">
+         select
+         c.title,
+         c.cover,
+         c.lesson_num AS lessonNum,
+         CONVERT(c.price, DECIMAL(8,2)) AS price,
+         s.title AS subjectLevelOne,
+         s2.title AS subjectLevelTwo,
+         t.name AS teacherName
+         from edu_course c
+         left join edu_teacher t on c.teacher_id=t.id
+         left join edu_subject s on c.subject_parent_id = s.id
+         left join edu_subject s2 on c.subject_id = s2.id
+         where c.id=#{id}
+     </select>
+
+
+     <select id="selectInfoWebById" resultType="com.hong.eduservice.entity.vo.CourseWebVo">
+              SELECT
+              c.id,c.title,c.price,c.lesson_num,c.cover,c.buy_count,c.view_count,
+              cd.description,
+              c.teacher_id,t.name teacherName,t.intro,t.avatar,
+              c.subject_parent_id,s.title subjectLevelOne,
+              c.subject_id,s2.title subjectLevelTwo
+              FROM edu_course c
+              left join edu_course_description cd on c.id=cd.id
+              left join edu_teacher t on c.teacher_id=t.id
+              left join edu_subject s on c.subject_parent_id = s.id
+              left join edu_subject s2 on c.subject_id=s2.id
+              where c.id=#{id}
+     </select>
+</mapper>
